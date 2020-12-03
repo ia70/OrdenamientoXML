@@ -76,6 +76,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="I_Tipo.vb" />
+    <Compile Include="I_Tipos.vb" />
     <Compile Include="mCore.vb" />
     <Compile Include="Principal.vb">
       <SubType>Form</SubType>
