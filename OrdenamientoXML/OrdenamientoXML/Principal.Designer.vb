@@ -56,7 +56,7 @@ Partial Class Principal
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(430, 74)
+        Me.Panel1.Size = New System.Drawing.Size(420, 74)
         Me.Panel1.TabIndex = 0
         '
         'Label1
@@ -84,7 +84,7 @@ Partial Class Principal
         Me.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight
         Me.GroupBox1.Controls.Add(Me.btnBuscar)
         Me.GroupBox1.Controls.Add(Me.txtCarpeta)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 89)
+        Me.GroupBox1.Location = New System.Drawing.Point(8, 85)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(405, 78)
         Me.GroupBox1.TabIndex = 1
@@ -130,7 +130,7 @@ Partial Class Principal
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.btnIniciar)
         Me.GroupBox2.Controls.Add(Me.txtIngreso)
-        Me.GroupBox2.Location = New System.Drawing.Point(13, 182)
+        Me.GroupBox2.Location = New System.Drawing.Point(9, 178)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(404, 214)
         Me.GroupBox2.TabIndex = 2
@@ -144,7 +144,7 @@ Partial Class Principal
         Me.btnIniciar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSkyBlue
         Me.btnIniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnIniciar.ForeColor = System.Drawing.Color.White
-        Me.btnIniciar.Location = New System.Drawing.Point(274, 168)
+        Me.btnIniciar.Location = New System.Drawing.Point(274, 174)
         Me.btnIniciar.Name = "btnIniciar"
         Me.btnIniciar.Size = New System.Drawing.Size(120, 31)
         Me.btnIniciar.TabIndex = 1
@@ -275,7 +275,7 @@ Partial Class Principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(430, 407)
+        Me.ClientSize = New System.Drawing.Size(420, 399)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Panel1)
