@@ -3,6 +3,11 @@
     Private _id As String
     Private _nombre As String
 
+    Public Sub New()
+        Id = ""
+        Nombre = ""
+    End Sub
+
     Public Property Id As String
         Get
             Return _id
