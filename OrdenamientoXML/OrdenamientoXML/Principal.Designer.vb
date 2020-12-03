@@ -32,7 +32,7 @@ Partial Class Principal
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.btnIniciar = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtTotalXML = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.txtOtro = New System.Windows.Forms.Label()
         Me.txtPago = New System.Windows.Forms.Label()
@@ -47,7 +47,8 @@ Partial Class Principal
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtIngreso = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
+        Me.txtTotalNuevos = New System.Windows.Forms.Label()
+        Me.btnProgreso = New System.Windows.Forms.ProgressBar()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -123,11 +124,12 @@ Partial Class Principal
         'GroupBox2
         '
         Me.GroupBox2.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GroupBox2.Controls.Add(Me.btnProgreso)
         Me.GroupBox2.Controls.Add(Me.Label10)
-        Me.GroupBox2.Controls.Add(Me.Label11)
+        Me.GroupBox2.Controls.Add(Me.txtTotalNuevos)
         Me.GroupBox2.Controls.Add(Me.GroupBox3)
         Me.GroupBox2.Controls.Add(Me.Label2)
-        Me.GroupBox2.Controls.Add(Me.Label9)
+        Me.GroupBox2.Controls.Add(Me.txtTotalXML)
         Me.GroupBox2.Controls.Add(Me.btnIniciar)
         Me.GroupBox2.Location = New System.Drawing.Point(9, 178)
         Me.GroupBox2.Name = "GroupBox2"
@@ -161,16 +163,16 @@ Partial Class Principal
         Me.Label2.TabIndex = 14
         Me.Label2.Text = "Total XML análizados:"
         '
-        'Label9
+        'txtTotalXML
         '
-        Me.Label9.BackColor = System.Drawing.Color.White
-        Me.Label9.ForeColor = System.Drawing.Color.DodgerBlue
-        Me.Label9.Location = New System.Drawing.Point(233, 134)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(174, 25)
-        Me.Label9.TabIndex = 13
-        Me.Label9.Text = "0"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtTotalXML.BackColor = System.Drawing.Color.White
+        Me.txtTotalXML.ForeColor = System.Drawing.Color.DodgerBlue
+        Me.txtTotalXML.Location = New System.Drawing.Point(233, 134)
+        Me.txtTotalXML.Name = "txtTotalXML"
+        Me.txtTotalXML.Size = New System.Drawing.Size(174, 25)
+        Me.txtTotalXML.TabIndex = 13
+        Me.txtTotalXML.Text = "0"
+        Me.txtTotalXML.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'GroupBox3
         '
@@ -337,16 +339,27 @@ Partial Class Principal
         Me.Label10.TabIndex = 17
         Me.Label10.Text = "Total Nuevos XML:"
         '
-        'Label11
+        'txtTotalNuevos
         '
-        Me.Label11.BackColor = System.Drawing.Color.White
-        Me.Label11.ForeColor = System.Drawing.Color.DodgerBlue
-        Me.Label11.Location = New System.Drawing.Point(233, 66)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(174, 25)
-        Me.Label11.TabIndex = 16
-        Me.Label11.Text = "0"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtTotalNuevos.BackColor = System.Drawing.Color.White
+        Me.txtTotalNuevos.ForeColor = System.Drawing.Color.DodgerBlue
+        Me.txtTotalNuevos.Location = New System.Drawing.Point(233, 66)
+        Me.txtTotalNuevos.Name = "txtTotalNuevos"
+        Me.txtTotalNuevos.Size = New System.Drawing.Size(174, 25)
+        Me.txtTotalNuevos.TabIndex = 16
+        Me.txtTotalNuevos.Text = "0"
+        Me.txtTotalNuevos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnProgreso
+        '
+        Me.btnProgreso.Location = New System.Drawing.Point(234, 172)
+        Me.btnProgreso.Name = "btnProgreso"
+        Me.btnProgreso.Size = New System.Drawing.Size(172, 30)
+        Me.btnProgreso.Step = 1
+        Me.btnProgreso.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.btnProgreso.TabIndex = 18
+        Me.btnProgreso.Value = 100
+        Me.btnProgreso.Visible = False
         '
         'Principal
         '
@@ -384,7 +397,7 @@ Partial Class Principal
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents btnIniciar As Button
     Friend WithEvents Label2 As Label
-    Friend WithEvents Label9 As Label
+    Friend WithEvents txtTotalXML As Label
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents txtOtro As Label
     Friend WithEvents txtPago As Label
@@ -399,5 +412,6 @@ Partial Class Principal
     Friend WithEvents Label3 As Label
     Friend WithEvents txtIngreso As Label
     Friend WithEvents Label10 As Label
-    Friend WithEvents Label11 As Label
+    Friend WithEvents txtTotalNuevos As Label
+    Friend WithEvents btnProgreso As ProgressBar
 End Class
