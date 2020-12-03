@@ -1,0 +1,3 @@
+﻿Module mCore
+
+End Module

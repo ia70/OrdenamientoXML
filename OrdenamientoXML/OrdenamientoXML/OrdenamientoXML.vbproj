@@ -47,6 +47,9 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>LOGO_Libersoft_Oficial 2 - 90x90.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -73,6 +76,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="mCore.vb" />
     <Compile Include="Principal.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +125,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo_13Ponientes.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LOGO_Libersoft_Oficial 2 - 90x90.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
