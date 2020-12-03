@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Threading
+Imports Newtonsoft.Json
 
 Module mCore
 #Region "VARIABLES"
@@ -7,6 +8,8 @@ Module mCore
     Public G_EmpresaNombre As String = "13 Ponientes analistas"
     Public G_MostrarErrores As Boolean = True
     Public G_ErrorLog As Boolean = False
+    Public G_TiposJSON As String = "tipos.json"
+
 #End Region
 #Region "VARIABLES CORE"
     Public N_Ingreso As Integer
@@ -20,6 +23,7 @@ Module mCore
 
     Public IdentificadorFolder As String = ""
     Public ListaFolder As List(Of String)
+    Public Tipos As I_Tipos
 
     Public Folder As String = ""
     Public PROCESO_CORE As Thread                'Proceso principal que siempre estará ejecutandose
@@ -29,6 +33,132 @@ Module mCore
 
 #End Region
 #Region "FUNCIONES GENERALES"
+
+    ''' <summary>
+    ''' Inicializa todas las variables
+    ''' </summary>
+    Public Sub InicializarVariables()
+        N_Ingreso = 0
+        N_Egreso = 0
+        N_Traslado = 0
+        N_Nomina = 0
+        N_Pago = 0
+        N_Otro = 0
+        N_TotalNuevos = 0
+        N_TotalAnalizados = 0
+
+        ListaFolder = New List(Of String)
+        ListaFolder.Add("I")
+        ListaFolder.Add("E")
+        ListaFolder.Add("T")
+        ListaFolder.Add("N")
+        ListaFolder.Add("P")
+
+        leerTipos()
+
+    End Sub
+
+    ''' <summary>
+    ''' Lee los tipos JSON o escribe el JSON
+    ''' </summary>
+    Public Sub leerTipos()
+        Dim texto As String = ""
+
+        Try
+            If File.Exists(G_TiposJSON) Then
+                Try
+                    Dim sr As New StreamReader(G_TiposJSON)
+                    texto = sr.ReadToEnd()
+                    sr.Close()
+                Catch ex As Exception
+                    X(ex)
+                End Try
+
+                If texto.Length > 0 Then
+                    Tipos = textToObj(texto)
+                End If
+            Else
+                texto = objToText(Tipos)
+                crearTipos(texto)
+                Tipos = New I_Tipos
+            End If
+        Catch ex As Exception
+            X(ex)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Devuelve un objeto generado desde una cadena
+    ''' </summary>
+    ''' <param name="cadena">Objeto en cadena</param>
+    ''' <returns></returns>
+    Public Function textToObj(ByVal cadena As String) As I_Tipos
+        Try
+            Return JsonConvert.DeserializeObject(Of I_Tipos)(cadena)
+        Catch ex As Exception
+            X(ex)
+            Return New I_Tipos
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Devuelve el texto de un objeto.
+    ''' </summary>
+    ''' <param name="obj">Objeto a convertir</param>
+    ''' <returns></returns>
+    Public Function objToText(ByVal obj As I_Tipos) As String
+        Dim texto As String
+
+        Try
+            If obj Is Nothing Then
+                obj = New I_Tipos
+            End If
+        Catch ex As Exception
+            X(ex)
+        End Try
+
+        Try
+            texto = JsonConvert.SerializeObject(obj)
+            Return texto
+        Catch ex As Exception
+            X(ex)
+            Return ""
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Elimina el fichero (G_TiposJSON) -> tipos.json
+    ''' </summary>
+    Public Sub eliminarTipos()
+        Try
+            If File.Exists(G_TiposJSON) Then
+                My.Computer.FileSystem.DeleteFile(G_TiposJSON)
+            End If
+        Catch ex As Exception
+            X(ex)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Crear el fichero G_TiposJSON -> tipos.json
+    ''' </summary>
+    ''' <param name="cadena">Objeto en cadena</param>
+    Public Sub crearTipos(ByVal cadena As String)
+        Dim escritor As StreamWriter
+
+        eliminarTipos()
+        Thread.Sleep(500)
+
+        Try
+            escritor = New StreamWriter(G_TiposJSON, False)
+            escritor.WriteLine(cadena)
+            escritor.Close()
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+
 
     Public Sub Msg()
         Msg("<..>", 3)
@@ -86,28 +216,6 @@ Module mCore
 #End Region
 #Region "FUNCIONES CORE"
 
-    ''' <summary>
-    ''' Inicializa todas las variables
-    ''' </summary>
-    Public Sub InicializarVariables()
-        N_Ingreso = 0
-        N_Egreso = 0
-        N_Traslado = 0
-        N_Nomina = 0
-        N_Pago = 0
-        N_Otro = 0
-        N_TotalNuevos = 0
-        N_TotalAnalizados = 0
-
-        ListaFolder = New List(Of String)
-        ListaFolder.Add("I")
-        ListaFolder.Add("E")
-        ListaFolder.Add("T")
-        ListaFolder.Add("N")
-        ListaFolder.Add("P")
-
-    End Sub
-
     Public Sub IniciarBusqueda()
 
         Try
@@ -151,11 +259,11 @@ Module mCore
         Try
             For Each f In Directory.GetFiles(sDir, "*.*")
                 Try
-                    If Not DB_FICHEROS_PROCESADOS.Existe(f) Then
-                        If ProcesarArchivo(f) Then
-                            DB_FICHEROS_PROCESADOS.Insertar(New I_Ficheros_procesados(f))
-                        End If
+                    'If Not DB_FICHEROS_PROCESADOS.Existe(f) Then
+                    If ProcesarArchivo(f) Then
+                        'DB_FICHEROS_PROCESADOS.Insertar(New I_Ficheros_procesados(f))
                     End If
+                    'End If
                 Catch ex As Exception
                     X(ex)
                 End Try
@@ -189,32 +297,32 @@ Module mCore
             X(ex)
         End Try
 
-        G_Total_ficheros_analizados += 1
+        'G_Total_ficheros_analizados += 1
 
         Try
             Dim Cadena As String = ""
-            Dim PdfReader = New PdfReader(archivo)
+            'Dim PdfReader = New PdfReader(archivo)
             Dim page As Integer
             Dim indice As Integer = 0
 
-            For page = 1 To PdfReader.NumberOfPages
-                Dim currentText = PdfTextExtractor.GetTextFromPage(PdfReader, page, New LocationTextExtractionStrategy())
+            'For page = 1 To PdfReader.NumberOfPages
+            'Dim currentText = PdfTextExtractor.GetTextFromPage(PdfReader, page, New LocationTextExtractionStrategy())
 
-                currentText = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(currentText)))
-                Cadena &= currentText
-            Next
-            PdfReader.Close()
+            'currentText = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(currentText)))
+            'Cadena &= currentText
+            'Next
+            'PdfReader.Close()
 
-            For Each formato As I_Formato In G_Formatos
-                If Cadena.Contains(formato.Cadena) Then
-                    G_Total_ficheros_convertidos += 1
-                    Return ProcesarFormato(Cadena, G_Formatos(indice), archivo)
-                End If
-                indice += 1
-            Next
+            'For Each formato As I_Formato In G_Formatos
+            'If Cadena.Contains(formato.Cadena) Then
+            'G_Total_ficheros_convertidos += 1
+            'Return ProcesarFormato(Cadena, G_Formatos(indice), archivo)
+            'End If
+            'indice += 1
+            ' Next
 
             'NO RPOCESADO -------------------------------
-            SetNoProcesados(archivo)
+            'SetNoProcesados(archivo)
 
         Catch ex As Exception
             X(ex)
