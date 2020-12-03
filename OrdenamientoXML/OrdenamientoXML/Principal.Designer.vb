@@ -154,11 +154,13 @@ Partial Class Principal
         'txtIngreso
         '
         Me.txtIngreso.BackColor = System.Drawing.Color.White
+        Me.txtIngreso.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtIngreso.Location = New System.Drawing.Point(114, 33)
         Me.txtIngreso.Name = "txtIngreso"
         Me.txtIngreso.Size = New System.Drawing.Size(87, 25)
         Me.txtIngreso.TabIndex = 0
-        Me.txtIngreso.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtIngreso.Text = "0"
+        Me.txtIngreso.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label3
         '
@@ -229,47 +231,57 @@ Partial Class Principal
         'txtEgreso
         '
         Me.txtEgreso.BackColor = System.Drawing.Color.White
+        Me.txtEgreso.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtEgreso.Location = New System.Drawing.Point(114, 61)
         Me.txtEgreso.Name = "txtEgreso"
         Me.txtEgreso.Size = New System.Drawing.Size(87, 25)
         Me.txtEgreso.TabIndex = 8
-        Me.txtEgreso.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtEgreso.Text = "0"
+        Me.txtEgreso.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txtTraslado
         '
         Me.txtTraslado.BackColor = System.Drawing.Color.White
+        Me.txtTraslado.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtTraslado.Location = New System.Drawing.Point(114, 90)
         Me.txtTraslado.Name = "txtTraslado"
         Me.txtTraslado.Size = New System.Drawing.Size(87, 25)
         Me.txtTraslado.TabIndex = 9
-        Me.txtTraslado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtTraslado.Text = "0"
+        Me.txtTraslado.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txtNomina
         '
         Me.txtNomina.BackColor = System.Drawing.Color.White
+        Me.txtNomina.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtNomina.Location = New System.Drawing.Point(114, 119)
         Me.txtNomina.Name = "txtNomina"
         Me.txtNomina.Size = New System.Drawing.Size(87, 25)
         Me.txtNomina.TabIndex = 10
-        Me.txtNomina.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtNomina.Text = "0"
+        Me.txtNomina.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txtPago
         '
         Me.txtPago.BackColor = System.Drawing.Color.White
+        Me.txtPago.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtPago.Location = New System.Drawing.Point(114, 148)
         Me.txtPago.Name = "txtPago"
         Me.txtPago.Size = New System.Drawing.Size(87, 25)
         Me.txtPago.TabIndex = 11
-        Me.txtPago.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtPago.Text = "0"
+        Me.txtPago.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txtOtro
         '
         Me.txtOtro.BackColor = System.Drawing.Color.White
+        Me.txtOtro.ForeColor = System.Drawing.Color.DodgerBlue
         Me.txtOtro.Location = New System.Drawing.Point(114, 177)
         Me.txtOtro.Name = "txtOtro"
         Me.txtOtro.Size = New System.Drawing.Size(87, 25)
         Me.txtOtro.TabIndex = 12
-        Me.txtOtro.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtOtro.Text = "0"
+        Me.txtOtro.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Principal
         '
