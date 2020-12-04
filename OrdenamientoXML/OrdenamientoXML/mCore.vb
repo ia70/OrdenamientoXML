@@ -21,8 +21,6 @@ Module mCore
     Public N_TotalNuevos As Integer
     Public N_TotalAnalizados As Integer
 
-    Public IdentificadorFolder As String = ""
-    Public ListaFolder As List(Of String)
     Public Tipos As I_Tipos
 
     Public Folder As String = ""
@@ -47,15 +45,7 @@ Module mCore
         N_TotalNuevos = 0
         N_TotalAnalizados = 0
 
-        ListaFolder = New List(Of String)
-        ListaFolder.Add("I")
-        ListaFolder.Add("E")
-        ListaFolder.Add("T")
-        ListaFolder.Add("N")
-        ListaFolder.Add("P")
-
         leerTipos()
-
     End Sub
 
     ''' <summary>
@@ -157,9 +147,7 @@ Module mCore
         End Try
 
     End Sub
-
-
-
+    '/////////////////////////////////////////////////////////////////////////////////////////
     Public Sub Msg()
         Msg("<..>", 3)
     End Sub
@@ -255,15 +243,28 @@ Module mCore
     Private Sub AnalizarCarpeta(ByVal sDir As String, ByVal CarpetaRaiz As String)
         Dim d As String
         Dim f As String
+        Dim aux As String
+        Dim procesar As Boolean
 
         Try
-            For Each f In Directory.GetFiles(sDir, "*.*")
+            For Each f In Directory.GetFiles(sDir, "*.xml")
+                N_TotalAnalizados += 1
+                procesar = True
+                aux = ""
                 Try
-                    'If Not DB_FICHEROS_PROCESADOS.Existe(f) Then
-                    If ProcesarArchivo(f) Then
-                        'DB_FICHEROS_PROCESADOS.Insertar(New I_Ficheros_procesados(f))
+                    aux = GetFolderNombre(f)
+                    For Each linea As I_Tipo In Tipos.Tipos
+                        If linea.Id = aux Then
+                            procesar = False
+                            Exit For
+                        End If
+                    Next
+
+                    If procesar Then
+                        N_TotalNuevos += 1
+                        ProcesarArchivo(f)
                     End If
-                    'End If
+
                 Catch ex As Exception
                     X(ex)
                 End Try
@@ -279,53 +280,137 @@ Module mCore
         End Try
     End Sub
 
+    Public Function GetFolderNombre(ByVal cadena As String) As String
+        Dim aux As String
+        Dim aux2 As String
+
+        Try
+            aux = Path.GetDirectoryName(cadena)
+            aux2 = Path.GetDirectoryName(aux)
+            cadena = aux
+            cadena = aux.Substring(aux2.Length + 1)
+
+            Return cadena
+        Catch ex As Exception
+            X(ex)
+            Return ""
+        End Try
+    End Function
+
     ''' <summary>
     ''' convierte el pdf en texto
     ''' </summary>
     ''' <param name="archivo">Patch</param>
     ''' <returns></returns>
     Public Function ProcesarArchivo(ByVal archivo As String) As Boolean
-        Dim ext As String
+        Dim texto As String = ""
+        Dim tipoComprobante As String
+        Dim carpetaOrigen As String
+        Dim carpetaDestino As String
+        Dim nombreArchivo As String
+        Dim archivoDestino As String
 
-        'VALIDA LA EXTENCION DEL ARCHIVO
         Try
-            ext = Path.GetExtension(archivo)
-            If Not ext.ToLower = ".pdf" And Not ext = "" Then
-                Return False
+            Dim sr As New StreamReader(archivo)
+            texto = sr.ReadToEnd()
+            sr.Close()
+
+            'CALCULOS -----------------------------------
+            tipoComprobante = GetTipoComprobante(texto)
+
+            If tipoComprobante.Length > 0 Then
+                'Carpeta origen
+                carpetaOrigen = Path.GetDirectoryName(archivo)
+                'Carpeta destino 
+                carpetaDestino = Path.Combine(carpetaOrigen, tipoComprobante)
+                'Nombre archivo
+                nombreArchivo = Path.GetFileName(archivo)
+
+                archivoDestino = Path.Combine(carpetaDestino, nombreArchivo)
+
+                'Secrea la carpeta si no existe
+                Directory.CreateDirectory(carpetaDestino)
+                'Se mueve el archivo
+                File.Move(archivo, archivoDestino)
+            End If
+            Return True
+        Catch ex As Exception
+            X(ex)
+        End Try
+
+        Return False
+    End Function
+
+    Public Function GetTipoComprobante(ByVal cadena As String) As String
+        Dim ini As String = "TipoDeComprobante=" + ChrW(34)
+        Dim fin As String = ChrW(34)
+        Dim i As Integer
+
+        Try
+            i = cadena.IndexOf(ini)
+            If i >= 0 Then
+                cadena = cadena.Substring(i + ini.Length)
+                i = cadena.IndexOf(fin)
+                If i >= 0 Then
+                    cadena = cadena.Substring(0, i)
+                    'SE VERIFICA SI ES COMPROBANTE NUEVO
+                    If verificarTipoComprobante(cadena) Then
+                        Return cadena
+                    End If
+                End If
             End If
         Catch ex As Exception
             X(ex)
         End Try
 
-        'G_Total_ficheros_analizados += 1
+        Return ""
+    End Function
+
+    Public Function verificarTipoComprobante(ByVal tipo As String) As Boolean
+        Dim existe As Boolean = False
+
+        If Tipos.Tipos.Count > 0 Then
+            Try
+                For Each linea As I_Tipo In Tipos.Tipos
+                    If linea.Id = tipo Then
+                        existe = True
+                        Exit For
+                    End If
+                Next
+
+                If existe Then
+                    Return True
+                Else
+                    Return agregarTipoComprobante(tipo)
+                End If
+
+            Catch ex As Exception
+            End Try
+        Else
+            Return agregarTipoComprobante(tipo)
+        End If
+
+        Return False
+    End Function
+
+    Public Function agregarTipoComprobante(ByVal tipo As String) As Boolean
+        Dim res As Integer
+        Dim valor As String
 
         Try
-            Dim Cadena As String = ""
-            'Dim PdfReader = New PdfReader(archivo)
-            Dim page As Integer
-            Dim indice As Integer = 0
-
-            'For page = 1 To PdfReader.NumberOfPages
-            'Dim currentText = PdfTextExtractor.GetTextFromPage(PdfReader, page, New LocationTextExtractionStrategy())
-
-            'currentText = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(currentText)))
-            'Cadena &= currentText
-            'Next
-            'PdfReader.Close()
-
-            'For Each formato As I_Formato In G_Formatos
-            'If Cadena.Contains(formato.Cadena) Then
-            'G_Total_ficheros_convertidos += 1
-            'Return ProcesarFormato(Cadena, G_Formatos(indice), archivo)
-            'End If
-            'indice += 1
-            ' Next
-
-            'NO RPOCESADO -------------------------------
-            'SetNoProcesados(archivo)
-
+            res = MsgBox("Desea agregar el tipo de comprobante: '" + tipo + "'?", vbYesNo, G_EmpresaNombre)
+            If Res = vbYes Then
+                valor = InputBox("Ingrese la descripción para el tipo de comprobante: '" + tipo + "'", G_EmpresaNombre)
+                If valor.Length > 0 Then
+                    Tipos.Tipos.Add(New I_Tipo(tipo, valor))
+                    crearTipos(objToText(Tipos))
+                    Msg("Tipo '" + tipo + "' agregado correctamente!")
+                    Return True
+                Else
+                    Msg("Tipo de comprobante NO agregado!", 2)
+                End If
+            End If
         Catch ex As Exception
-            X(ex)
         End Try
 
         Return False
@@ -339,7 +424,9 @@ Module mCore
         PROCESO_CORE.Abort()
         On Error Resume Next
         PROCESO_CORE.Join()
-        'AnalisisInicial()
+        Msg("¡Proceso terminado!")
+        Principal.btnProgreso.Visible = False
+        Principal.tmrActualizacion.Enabled = False
     End Sub
 #End Region
 
