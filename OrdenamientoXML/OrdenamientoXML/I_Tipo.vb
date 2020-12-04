@@ -8,6 +8,11 @@
         Nombre = ""
     End Sub
 
+    Public Sub New(id As String, nombre As String)
+        _id = id
+        _nombre = nombre
+    End Sub
+
     Public Property Id As String
         Get
             Return _id
