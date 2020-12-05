@@ -2,15 +2,18 @@
 
     Private _id As String
     Private _nombre As String
+    Private _total As Integer
 
     Public Sub New()
         Id = ""
         Nombre = ""
+        Total = 0
     End Sub
 
     Public Sub New(id As String, nombre As String)
         _id = id
         _nombre = nombre
+        Total = 0
     End Sub
 
     Public Property Id As String
@@ -28,6 +31,15 @@
         End Get
         Set(value As String)
             _nombre = value
+        End Set
+    End Property
+
+    Public Property Total As Integer
+        Get
+            Return _total
+        End Get
+        Set(value As Integer)
+            _total = value
         End Set
     End Property
 End Class
