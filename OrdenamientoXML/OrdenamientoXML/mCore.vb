@@ -12,17 +12,12 @@ Module mCore
 
 #End Region
 #Region "VARIABLES CORE"
-    Public N_Ingreso As Integer
-    Public N_Egreso As Integer
-    Public N_Traslado As Integer
-    Public N_Nomina As Integer
-    Public N_Pago As Integer
-    Public N_Otro As Integer
     Public N_TotalNuevos As Integer
     Public N_TotalAnalizados As Integer
 
     Public Tipos As I_Tipos
 
+    Public ProcesoActivo As Boolean = False
     Public Folder As String = ""
     Public PROCESO_CORE As Thread                'Proceso principal que siempre estará ejecutandose
     Public PROCESO_BUSQUEDA As Thread            'Proceso que almacena la función para buscar archivos
@@ -36,12 +31,6 @@ Module mCore
     ''' Inicializa todas las variables
     ''' </summary>
     Public Sub InicializarVariables()
-        N_Ingreso = 0
-        N_Egreso = 0
-        N_Traslado = 0
-        N_Nomina = 0
-        N_Pago = 0
-        N_Otro = 0
         N_TotalNuevos = 0
         N_TotalAnalizados = 0
 
@@ -248,11 +237,13 @@ Module mCore
 
         Try
             For Each f In Directory.GetFiles(sDir, "*.xml")
-                N_TotalAnalizados += 1
                 procesar = True
                 aux = ""
                 Try
                     aux = GetFolderNombre(f)
+
+
+
                     For Each linea As I_Tipo In Tipos.Tipos
                         If linea.Id = aux Then
                             procesar = False
@@ -263,6 +254,8 @@ Module mCore
                     If procesar Then
                         N_TotalNuevos += 1
                         ProcesarArchivo(f)
+                    Else
+                        N_TotalAnalizados += 1
                     End If
 
                 Catch ex As Exception
@@ -368,14 +361,19 @@ Module mCore
 
     Public Function verificarTipoComprobante(ByVal tipo As String) As Boolean
         Dim existe As Boolean = False
+        Dim indice As Integer
 
         If Tipos.Tipos.Count > 0 Then
+            indice = 0
             Try
                 For Each linea As I_Tipo In Tipos.Tipos
                     If linea.Id = tipo Then
                         existe = True
+                        'SUMA 1 AL TIPO DE COMPROBANTE --------------
+                        Tipos.Tipos(indice).Total += 1
                         Exit For
                     End If
+                    indice += 1
                 Next
 
                 If existe Then
@@ -403,6 +401,10 @@ Module mCore
                 valor = InputBox("Ingrese la descripción para el tipo de comprobante: '" + tipo + "'", G_EmpresaNombre)
                 If valor.Length > 0 Then
                     Tipos.Tipos.Add(New I_Tipo(tipo, valor))
+
+                    'SUMA 1 AL TIPO DE COMPROBANTE --------------
+                    Tipos.Tipos(Tipos.Tipos.Count - 1).Total += 1
+
                     crearTipos(objToText(Tipos))
                     Msg("Tipo '" + tipo + "' agregado correctamente!")
                     Return True
@@ -424,9 +426,8 @@ Module mCore
         PROCESO_CORE.Abort()
         On Error Resume Next
         PROCESO_CORE.Join()
+        ProcesoActivo = False
         Msg("¡Proceso terminado!")
-        Principal.btnProgreso.Visible = False
-        Principal.tmrActualizacion.Enabled = False
     End Sub
 #End Region
 
