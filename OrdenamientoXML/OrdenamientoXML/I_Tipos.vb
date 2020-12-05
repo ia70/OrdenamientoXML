@@ -17,4 +17,12 @@ Public Class I_Tipos
         End Set
     End Property
 
+    Public Sub LimpiarTotales()
+        Dim i As Integer
+        For i = 0 To Tipos.Count - 1
+            Tipos(i).Total = 0
+        Next
+    End Sub
+
+
 End Class
